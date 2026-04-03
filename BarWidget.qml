@@ -12,7 +12,7 @@ Item {
     property var pluginApi: null
     property var backend: pluginApi?.mainInstance
     property string lyricText: backend?.currentLyric || ""
-    property bool isPlaying: backend?.isPlaying ?? false
+    property int lyricInterval: backend?.lyricInterval
 
     property int widgetWidth: pluginApi?.pluginSettings?.widgetWidth ?? 215
     property int scrollSpeed: pluginApi?.pluginSettings?.scrollSpeed ?? 70
@@ -20,6 +20,7 @@ Item {
     property int customFontSize: pluginApi?.pluginSettings?.fontSize ?? 10
     property bool hideWhenEmpty: pluginApi?.pluginSettings?.hideWhenEmpty ?? true
     property string customFontFamily: pluginApi?.pluginSettings?.fontFamily ?? Settings.data.ui.fontDefault
+    property bool adaptScrollSpeed: pluginApi?.pluginSettings?.adaptScrollSpeed ?? true
 
     visible: !hideWhenEmpty || (lyricText !== "No Lyrics" && lyricText !== "")
 
@@ -51,7 +52,7 @@ Item {
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
 
-        width: isVertical ? verticalSize : root.widgetWidth
+        width: isVertical ? verticalSize : root.lyricText === "​" ? iconSize + Style.marginS : root.widgetWidth 
         height: isVertical ? verticalSize : Style.capsuleHeight
 
         radius: Style.radiusM
@@ -104,7 +105,7 @@ Item {
                     fontFamily: root.customFontFamily
 
                     mode: root.scrollMode
-                    speed: root.scrollSpeed
+                    speed: root.adaptScrollSpeed ? (titleMetrics.contentWidth - parent.width + 50) / root.lyricInterval * 1250 : root.scrollSpeed
                     needsScroll: titleMetrics.contentWidth > parent.width
                 }
             }

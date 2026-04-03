@@ -14,6 +14,8 @@ ColumnLayout {
     property int draftFontSize: pluginApi?.pluginSettings?.fontSize ?? 10
     property bool draftHideWhenEmpty: pluginApi?.pluginSettings?.hideWhenEmpty ?? true
     property string draftFontFamily: pluginApi?.pluginSettings?.fontFamily ?? "Inter"
+    property bool draftAdaptScrollSpeed: pluginApi?.pluginSettings?.adaptScrollSpeed ?? true
+    property bool draftShowWhenPaused: pluginApi?.pluginSettings?.showWhenPaused ?? true
 
     spacing: Style.marginM
 
@@ -22,6 +24,8 @@ ColumnLayout {
             pluginApi.pluginSettings.widgetWidth = draftWidth;
             pluginApi.pluginSettings.scrollSpeed = draftSpeed;
             pluginApi.pluginSettings.scrollMode = draftMode;
+            pluginApi.pluginSettings.adaptScrollSpeed = draftAdaptScrollSpeed;
+            pluginApi.pluginSettings.showWhenPaused = draftShowWhenPaused;
             pluginApi.pluginSettings.fontSize = draftFontSize;
             pluginApi.pluginSettings.hideWhenEmpty = draftHideWhenEmpty;
             // Save the selected font
@@ -124,10 +128,26 @@ ColumnLayout {
     }
 
     NToggle {
+        label: "Adapt scroll speed to line"
+        checked: draftAdaptScrollSpeed
+        onToggled: newState => {
+            draftAdaptScrollSpeed = newState;
+        }
+    }
+
+    NToggle {
         label: "Hide when empty"
         checked: draftHideWhenEmpty
         onToggled: newState => {
             draftHideWhenEmpty = newState;
+        }
+    }
+
+    NToggle {
+        label: "Show display when paused"
+        checked: draftShowWhenPaused
+        onToggled: newState => {
+            draftShowWhenPaused = newState;
         }
     }
 }
